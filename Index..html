@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Punta Beach Club · Google Ads + IA</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#1a73e8;--bl:#e8f0fe;
+  --green:#0f9e75;--gl:#e6f4ea;
+  --red:#c5221f;--rl:#fce8e6;
+  --amber:#f9ab00;--al:#fff9e6;
+  --g0:#fff;--g1:#f8f9fa;--g2:#f1f3f4;--g3:#e8eaed;--g4:#dadce0;
+  --g6:#9aa0a6;--g7:#5f6368;--g8:#3c4043;--g9:#202124;
+  --font:'Google Sans','Roboto',sans-serif;
+  --r:10px;--rl2:16px;
+}
+html,body{height:100%;font-family:var(--font);background:var(--g1);color:var(--g9);font-size:14px}
+
+/* SHELL */
+.shell{display:flex;flex-direction:column;height:100vh;max-width:900px;margin:0 auto;background:var(--g0);box-shadow:0 0 50px rgba(0,0,0,.1)}
+
+/* HEADER */
+.hdr{display:flex;align-items:center;gap:12px;padding:14px 22px;background:var(--g0);border-bottom:1px solid var(--g4);flex-shrink:0}
+.hdr-logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#0f9e75,#085041);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.hdr-name{font-size:15px;font-weight:500;color:var(--g9);line-height:1.2}
+.hdr-sub{font-size:11px;color:var(--g6)}
+.hdr-right{margin-left:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pill{display:flex;align-items:center;gap:5px;font-size:11px;padding:4px 11px;border-radius:20px}
+.pill-live{color:var(--green);background:var(--gl)}
+.pill-pow{color:var(--g7);background:var(--g2)}
+.odot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.rep-btn{display:none;align-items:center;gap:5px;padding:6px 14px;background:var(--blue);color:#fff;border:none;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer}
+.rep-btn.show{display:flex}
+.rep-btn:hover{background:#1557b0}
+
+/* TABS */
+.tabs{display:flex;background:var(--g0);border-bottom:1px solid var(--g4);flex-shrink:0;overflow-x:auto}
+.tab{padding:13px 18px;font-size:13px;font-weight:500;color:var(--g7);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;flex-shrink:0}
+.tab:hover{color:var(--blue);background:var(--bl)}
+.tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+
+/* PAGES */
+.pages{flex:1;overflow-y:auto}
+.page{display:none;padding:22px}
+.page.active{display:block}
+
+/* METRIC CARDS */
+.mgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:20px}
+.mc{background:var(--g0);border:1px solid var(--g4);border-radius:var(--r);padding:14px 16px;cursor:pointer}
+.mc:hover,.mc.sel{border-color:var(--blue);box-shadow:0 0 0 2px rgba(26,115,232,.15)}
+.mc-lbl{font-size:11px;color:var(--g7);margin-bottom:6px}
+.mc-val{font-size:26px;font-weight:400;color:var(--g9);letter-spacing:-.5px}
+.mc-val.empty{color:var(--g5)}
+.mc-delta{font-size:11px;margin-top:3px}
+.up{color:var(--green)}.dn{color:var(--red)}.neu{color:var(--g6)}
+
+/* CHART */
+.cc{background:var(--g0);border:1px solid var(--g4);border-radius:var(--rl2);padding:18px;margin-bottom:20px}
+.cc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+.cc-title{font-size:13px;font-weight:500;color:var(--g8)}
+.ctabs{display:flex;border:1px solid var(--g4);border-radius:var(--r);overflow:hidden}
+.ctab{padding:5px 12px;font-size:12px;cursor:pointer;color:var(--g7);border-right:1px solid var(--g4);background:var(--g0)}
+.ctab:last-child{border-right:none}
+.ctab.active{background:var(--bl);color:var(--blue);font-weight:500}
+
+/* SETTINGS GRID */
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+@media(max-width:620px){.sg{grid-template-columns:1fr}}
+.sc{background:var(--g0);border:1px solid var(--g4);border-radius:var(--rl2);overflow:hidden}
+.sc-head{padding:12px 16px;border-bottom:1px solid var(--g4);display:flex;align-items:center;justify-content:space-between}
+.sc-title{font-size:13px;font-weight:500;color:var(--g8)}
+.elink{font-size:12px;color:var(--blue);cursor:pointer}
+.sr{display:flex;justify-content:space-between;align-items:flex-start;padding:9px 16px;border-bottom:1px solid var(--g3);gap:8px}
+.sr:last-child{border-bottom:none}
+.sk{font-size:13px;color:var(--g7);flex-shrink:0}
+.sv{font-size:13px;color:var(--g9);font-weight:500;text-align:right;line-height:1.5}
+.sv.bl{color:var(--blue)}.sv.gr{color:var(--green)}.sv.rd{color:var(--red)}.sv.am{color:#b06000}
+
+/* TABLE */
+.tc{background:var(--g0);border:1px solid var(--g4);border-radius:var(--rl2);overflow:hidden;margin-bottom:20px}
+.tt{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--g4)}
+.ttitle{font-size:13px;font-weight:500;color:var(--g8)}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;padding:9px 14px;font-size:10px;font-weight:500;color:var(--g7);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--g4);background:var(--g1);white-space:nowrap}
+td{padding:10px 14px;border-bottom:1px solid var(--g4);color:var(--g8)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--g1)}
+.sdot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:5px}
+.da{background:#34A853}.dp{background:#FBBC05}
+.mp{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:500}
+.mph{background:#e8f0fe;color:#1558d6}
+.mpe{background:#e6f4ea;color:#137333}
+.mpb{background:#f1f3f4;color:#5f6368}
+.neg-tag{background:#fce8e6;color:#c5221f;font-size:10px;padding:2px 8px;border-radius:20px;display:inline-block;margin:2px 3px}
+.comp-tag{background:#fff9e6;color:#7c4d00;font-size:10px;padding:2px 8px;border-radius:20px;display:inline-block;margin:2px 3px}
+
+/* ADS */
+.ad-box{border:1px solid var(--g4);border-radius:var(--r);padding:14px 16px;margin-bottom:12px}
+.ad-box.featured{border-color:var(--blue);border-width:2px}
+.ad-status{font-size:11px;font-weight:500;margin-bottom:2px}
+.ad-url{font-size:11px;color:#137333;margin-bottom:3px}
+.ad-title{font-size:15px;color:#1a0dab;margin-bottom:5px;cursor:pointer;line-height:1.4}
+.ad-desc{font-size:13px;color:var(--g7);line-height:1.55}
+.ad-exts{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
+.ad-ext{font-size:11px;color:#1a0dab;border:1px solid #c5d9f8;border-radius:3px;padding:2px 8px}
+
+/* HOTEL PREVIEW */
+.hp{background:var(--g0);border:1px solid var(--g4);border-radius:var(--rl2);overflow:hidden;margin-bottom:18px}
+.hp-strip{height:100px;background:linear-gradient(135deg,#0f9e75,#085041);display:flex;align-items:center;gap:8px;padding:12px 16px}
+.hp-thumb{width:66px;height:76px;border-radius:6px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:20px;border:1px solid rgba(255,255,255,.2)}
+.hp-meta{padding:14px 18px;display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.hp-info{flex:1;min-width:180px}
+.hp-name{font-size:17px;font-weight:500;margin-bottom:3px}
+.hp-addr{font-size:12px;color:var(--g6);margin-bottom:5px}
+.hp-stars{color:#FBBC05;font-size:13px}
+.hp-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.hp-tag{font-size:11px;padding:3px 9px;border-radius:20px}
+.hp-ctas{display:flex;gap:7px;margin-top:9px;flex-wrap:wrap}
+.hp-book{padding:7px 16px;background:var(--blue);color:#fff;border:none;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer}
+.hp-map{padding:7px 13px;border:1px solid var(--blue);color:var(--blue);border-radius:20px;font-size:12px;cursor:pointer;background:transparent}
+.hp-wa{padding:7px 13px;border:1px solid #25D366;color:#25D366;border-radius:20px;font-size:12px;cursor:pointer;background:transparent}
+.hp-price{text-align:right}
+.hp-from{font-size:11px;color:var(--g6)}
+.hp-num{font-size:20px;font-weight:500;color:var(--g9)}
+.hp-sub{font-size:11px;color:var(--g6)}
+
+/* INSIGHTS */
+.ir{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:20px}
+.ins{background:var(--g0);border:1px solid var(--g4);border-radius:var(--rl2);padding:13px 15px}
+.ins.warn{border-left:3px solid var(--amber)}
+.ins.good{border-left:3px solid #34A853}
+.ins.tip{border-left:3px solid var(--blue)}
+.ins.alert{border-left:3px solid var(--red)}
+.ins-ico{font-size:18px;margin-bottom:6px}
+.ins-t{font-size:12px;font-weight:500;color:var(--g8);margin-bottom:3px}
+.ins-d{font-size:11px;color:var(--g7);line-height:1.5}
+
+/* DATA BAR */
+.dbar{background:var(--al);border:1px solid var(--amber);border-radius:var(--r);padding:10px 16px;display:flex;align-items:center;gap:10px;margin-bottom:18px;font-size:13px;color:#5f4d00;flex-wrap:wrap}
+.dbar-btn{padding:6px 14px;background:var(--amber);color:#5f4d00;border:none;border-radius:var(--r);font-size:12px;font-weight:500;cursor:pointer;white-space:nowrap}
+
+/* CHAT */
+.chat-shell{display:flex;flex-direction:column;height:100%;padding:0}
+.chat-welcome{padding:20px 22px 16px;border-bottom:1px solid var(--g3);flex-shrink:0}
+.cw-title{font-size:19px;font-weight:500;margin-bottom:4px}
+.cw-sub{font-size:13px;color:var(--g7);line-height:1.6;margin-bottom:14px}
+.cw-topics{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:7px}
+.cwt{display:flex;align-items:flex-start;gap:9px;padding:10px 12px;border:1px solid var(--g4);border-radius:var(--r);cursor:pointer;transition:all .15s}
+.cwt:hover{border-color:var(--blue);background:var(--bl)}
+.cwt-ico{font-size:16px;flex-shrink:0;margin-top:1px}
+.cwt-t{font-size:12px;font-weight:500;color:var(--g8);margin-bottom:1px}
+.cwt-s{font-size:11px;color:var(--g6);line-height:1.3}
+.chat-msgs{flex:1;overflow-y:auto;padding:16px 22px;display:flex;flex-direction:column;gap:13px;min-height:200px;max-height:340px}
+.chat-msgs::-webkit-scrollbar{width:3px}
+.chat-msgs::-webkit-scrollbar-thumb{background:var(--g4);border-radius:2px}
+.cmsg{display:flex;gap:9px;align-items:flex-end;animation:fi .2s ease}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.cmsg.u{flex-direction:row-reverse}
+.cav{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.cav.bot{background:linear-gradient(135deg,#0f9e75,#085041);color:#fff}
+.cav.u{background:var(--blue);color:#fff;font-size:11px;font-weight:500}
+.cbub{max-width:76%;padding:10px 14px;border-radius:16px;font-size:13px;line-height:1.7;word-break:break-word}
+.cbub.bot{background:var(--g2);color:var(--g9);border-radius:4px 16px 16px 16px}
+.cbub.u{background:var(--blue);color:#fff;border-radius:16px 4px 16px 16px}
+.cbub strong{font-weight:600}
+.cbub ul{margin:5px 0 3px 14px}
+.cbub li{margin-bottom:3px}
+.sug-chip{display:inline-flex;align-items:center;gap:4px;background:var(--al);border:1px solid var(--amber);color:#7c4d00;font-size:11px;padding:4px 10px;border-radius:20px;margin-top:7px}
+.cts{font-size:10px;color:var(--g6);margin-top:2px}
+.cmsg.u .cts{text-align:right}
+.typing-row{display:none;align-items:flex-end;gap:9px;padding:0 22px 8px;flex-shrink:0}
+.typing-row.show{display:flex}
+.tbub{background:var(--g2);border-radius:4px 16px 16px 16px;padding:10px 14px;display:flex;gap:4px}
+.td{width:5px;height:5px;border-radius:50%;background:var(--g6);animation:tdb 1.4s infinite}
+.td:nth-child(2){animation-delay:.2s}
+.td:nth-child(3){animation-delay:.4s}
+@keyframes tdb{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+.chat-input{padding:12px 22px;border-top:1px solid var(--g4);background:var(--g0);flex-shrink:0}
+.qrow{display:none;flex-wrap:wrap;gap:5px;margin-bottom:9px}
+.qrow.show{display:flex}
+.qr{padding:5px 11px;border:1px solid var(--blue);color:var(--blue);border-radius:20px;font-size:11px;cursor:pointer;background:var(--g0)}
+.qr:hover{background:var(--bl)}
+.irow{display:flex;gap:7px;align-items:flex-end}
+.inp{flex:1;padding:10px 14px;border:1.5px solid var(--g4);border-radius:22px;font-size:13px;font-family:var(--font);outline:none;resize:none;max-height:100px;overflow-y:auto;color:var(--g9)}
+.inp:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,115,232,.1)}
+.sbtn{width:40px;height:40px;border-radius:50%;background:var(--blue);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sbtn:hover{background:#1557b0}
+.sbtn:disabled{background:var(--g4);cursor:not-allowed}
+.sbtn svg{width:17px;height:17px;fill:#fff}
+.chat-hint{font-size:11px;color:var(--g6);text-align:center;margin-top:6px}
+
+/* MODAL */
+.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;align-items:center;justify-content:center}
+.ov.open{display:flex}
+.modal{background:#fff;border-radius:var(--rl2);padding:22px;width:460px;max-width:92vw;max-height:85vh;overflow-y:auto}
+.modal-t{font-size:17px;font-weight:500;margin-bottom:4px}
+.modal-s{font-size:13px;color:var(--g7);margin-bottom:16px;line-height:1.5}
+.mf{margin-bottom:12px}
+.ml{font-size:12px;color:var(--g7);margin-bottom:4px;font-weight:500}
+.mi{width:100%;padding:8px 12px;border:1px solid var(--g4);border-radius:var(--r);font-size:13px;font-family:var(--font);outline:none}
+.mi:focus{border-color:var(--blue)}
+.mbtns{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+.mcan{padding:7px 16px;border:1px solid var(--g4);border-radius:var(--r);font-size:13px;cursor:pointer;background:transparent;color:var(--g7)}
+.msnd{padding:7px 18px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:5px}
+.msnd:hover{background:#1557b0}
+
+/* DATA MODAL */
+.mrow2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:400px){.mrow2{grid-template-columns:1fr}}
+
+/* TOAST */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:var(--g9);color:#fff;padding:9px 18px;border-radius:22px;font-size:13px;font-weight:500;z-index:400;display:none;align-items:center;gap:7px;white-space:nowrap}
+.toast.show{display:flex}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-logo">🏖️</div>
+  <div>
+    <div class="hdr-name">La Punta Beach Club · Google Ads</div>
+    <div class="hdr-sub">Panel de campaña · Agente: Ana María Gómez</div>
+  </div>
+  <div class="hdr-right">
+    <div class="pill pill-live"><span class="odot"></span>Activo</div>
+    <div class="pill pill-pow">IA · Claude</div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active" onclick="switchTab(this,'resumen')">Resumen</div>
+  <div class="tab" onclick="switchTab(this,'campana')">Campaña</div>
+  <div class="tab" onclick="switchTab(this,'anuncios')">Anuncios</div>
+  <div class="tab" onclick="switchTab(this,'palabras')">Palabras clave</div>
+  <div class="tab" onclick="switchTab(this,'hotel')">Ficha Hotels</div>
+  <div class="tab" onclick="switchTab(this,'chat')">🤖 Asistente IA</div>
+</div>
+
+<div class="pages">
+
+<!-- ===== RESUMEN ===== -->
+<div class="page active" id="page-resumen">
+  <div class="dbar" id="dbar">
+    🏖️ <strong>Bienvenido, Lesek.</strong> Tu campaña está configurada y lista. Usa el Asistente IA para resolver dudas o proponer cambios.
+    <button class="dbar-btn" onclick="openDataModal()">Actualizar métricas</button>
+  </div>
+  <div class="mgrid" id="hl-metrics">
+    <div class="mc sel"><div class="mc-lbl">👁 Impresiones</div><div class="mc-val empty" id="v-imp">—</div><div class="mc-delta neu" id="d-imp">Sin datos aún</div></div>
+    <div class="mc"><div class="mc-lbl">🖱 Clics</div><div class="mc-val empty" id="v-clics">—</div><div class="mc-delta neu" id="d-clics">Sin datos aún</div></div>
+    <div class="mc"><div class="mc-lbl">📊 CTR</div><div class="mc-val empty" id="v-ctr">—</div><div class="mc-delta neu" id="d-ctr">Objetivo &gt;4%</div></div>
+    <div class="mc"><div class="mc-lbl">💰 Inversión</div><div class="mc-val empty" id="v-costo">$0</div><div class="mc-delta neu" id="d-costo">de $4.000.000 COP</div></div>
+    <div class="mc"><div class="mc-lbl">🎯 Reservas</div><div class="mc-val empty" id="v-conv">—</div><div class="mc-delta neu" id="d-conv">Objetivo: 140/mes</div></div>
+    <div class="mc"><div class="mc-lbl">📈 ROAS</div><div class="mc-val empty" id="v-roas">—</div><div class="mc-delta neu" id="d-roas">Objetivo: 5x</div></div>
+  </div>
+  <div class="cc">
+    <div class="cc-head">
+      <div class="cc-title">Rendimiento en el tiempo</div>
+      <div class="ctabs">
+        <div class="ctab active" onclick="switchChart(this,'clics')">Clics</div>
+        <div class="ctab" onclick="switchChart(this,'imp')">Impr.</div>
+        <div class="ctab" onclick="switchChart(this,'conv')">Reservas</div>
+        <div class="ctab" onclick="switchChart(this,'costo')">Inversión</div>
+      </div>
+    </div>
+    <div style="position:relative;height:190px"><canvas id="mc" role="img" aria-label="Rendimiento campaña">Proyección de rendimiento.</canvas></div>
+  </div>
+  <div class="ir" id="ins-row">
+    <div class="ins tip"><div class="ins-ico">💡</div><div class="ins-t">Campaña lista para activar</div><div class="ins-d">Una vez aprobada, Ana María configura y lanza en menos de 48h. Los primeros datos aparecen a las 24h.</div></div>
+    <div class="ins warn"><div class="ins-ico">⚡</div><div class="ins-t">Fines de semana = pico</div><div class="ins-d">Sáb–Dom concentran el 60% de la demanda de pasadías. El presupuesto refuerza automáticamente estos días.</div></div>
+    <div class="ins good"><div class="ins-ico">🏖️</div><div class="ins-t">Dentro de Fénix Beach</div><div class="ins-d">Operar en Fénix te da autoridad de marca. Los turistas que ya conocen Fénix se convierten en clientes potenciales directos.</div></div>
+    <div class="ins alert"><div class="ins-ico">🏆</div><div class="ins-t">Captura tráfico de competencia</div><div class="ins-d">Tu anuncio aparece cuando buscan Bora Bora, Makani o Blue Apple — interceptando clientes antes de que reserven con ellos.</div></div>
+  </div>
+</div>
+
+<!-- ===== CAMPAÑA ===== -->
+<div class="page" id="page-campana">
+  <div class="sg">
+    <div class="sc" id="hl-search">
+      <div class="sc-head"><div class="sc-title">Campaña 1 — Google Search (70%)</div><span class="sc-title" style="font-size:11px;color:var(--green)">● Activa</span></div>
+      <div class="sr"><span class="sk">Objetivo</span><span class="sv bl">Intención inmediata de compra</span></div>
+      <div class="sr"><span class="sk">Presupuesto</span><span class="sv bl">$2.800.000 COP/mes</span></div>
+      <div class="sr"><span class="sk">Presupuesto diario</span><span class="sv">$93.000 COP</span></div>
+      <div class="sr"><span class="sk">Estrategia de puja</span><span class="sv">Maximizar conversiones</span></div>
+      <div class="sr"><span class="sk">Red</span><span class="sv">Búsqueda de Google</span></div>
+      <div class="sr"><span class="sk">Idiomas</span><span class="sv">Español, Inglés</span></div>
+      <div class="sr"><span class="sk">Seguimiento conv.</span><span class="sv gr">Reservas + Contactos ✓</span></div>
+    </div>
+    <div class="sc" id="hl-pmax">
+      <div class="sc-head"><div class="sc-title">Campaña 2 — Performance Max (30%)</div><span class="sc-title" style="font-size:11px;color:var(--green)">● Activa</span></div>
+      <div class="sr"><span class="sk">Objetivo</span><span class="sv bl">Visibilidad y nuevos clientes</span></div>
+      <div class="sr"><span class="sk">Presupuesto</span><span class="sv bl">$1.200.000 COP/mes</span></div>
+      <div class="sr"><span class="sk">Presupuesto diario</span><span class="sv">$40.000 COP</span></div>
+      <div class="sr"><span class="sk">Tipo</span><span class="sv">Performance Max (PMax)</span></div>
+      <div class="sr"><span class="sk">Canales</span><span class="sv">Search, Display, YouTube, Maps</span></div>
+      <div class="sr"><span class="sk">Señales de audiencia</span><span class="sv gr">Turismo playa · Lujo ✓</span></div>
+      <div class="sr"><span class="sk">Remarketing</span><span class="sv gr">Activo ✓</span></div>
+    </div>
+    <div class="sc" id="hl-geo">
+      <div class="sc-head"><div class="sc-title">Segmentación geográfica</div><span class="elink">✏ Editar</span></div>
+      <div class="sr"><span class="sk">Bogotá</span><span class="sv gr">● Activa · Prioridad alta</span></div>
+      <div class="sr"><span class="sk">Medellín</span><span class="sv gr">● Activa · Prioridad alta</span></div>
+      <div class="sr"><span class="sk">Cali</span><span class="sv gr">● Activa</span></div>
+      <div class="sr"><span class="sk">Bucaramanga</span><span class="sv gr">● Activa</span></div>
+      <div class="sr"><span class="sk">Costa Caribe (local)</span><span class="sv gr">● Activa · Turista en Ctg</span></div>
+      <div class="sr"><span class="sk">EEUU / España</span><span class="sv gr">● Activa · Internacional</span></div>
+    </div>
+    <div class="sc" id="hl-kpis">
+      <div class="sc-head"><div class="sc-title">KPIs a monitorear</div></div>
+      <div class="sr"><span class="sk">Reservas mensuales</span><span class="sv bl">Objetivo: 140</span></div>
+      <div class="sr"><span class="sk">Leads (contactos)</span><span class="sv bl">Objetivo: 320</span></div>
+      <div class="sr"><span class="sk">Costo por reserva</span><span class="sv bl">Objetivo: $28.500 COP</span></div>
+      <div class="sr"><span class="sk">ROAS objetivo</span><span class="sv bl">5x</span></div>
+      <div class="sr"><span class="sk">Ingreso estimado</span><span class="sv gr">$21.000.000 COP/mes</span></div>
+      <div class="sr"><span class="sk">Inversión total</span><span class="sv">$4.000.000 COP/mes</span></div>
+    </div>
+  </div>
+  <div class="sc" id="hl-plan" style="margin-bottom:14px">
+    <div class="sc-head"><div class="sc-title">Plan de implementación</div></div>
+    <div class="sr"><span class="sk">Paso 1</span><span class="sv bl">Configuración técnica de la cuenta</span></div>
+    <div class="sr"><span class="sk">Paso 2</span><span class="sv">Creación de campañas y anuncios</span></div>
+    <div class="sr"><span class="sk">Paso 3</span><span class="sv">Configuración seguimiento de conversiones</span></div>
+    <div class="sr"><span class="sk">Paso 4</span><span class="sv">Lanzamiento de campaña</span></div>
+    <div class="sr"><span class="sk">Paso 5</span><span class="sv">Optimización semanal continua</span></div>
+    <div class="sr"><span class="sk">Paso 6</span><span class="sv">Reporte mensual de resultados</span></div>
+    <div class="sr"><span class="sk">Agente responsable</span><span class="sv gr">Ana María Gómez ✓</span></div>
+  </div>
+</div>
+
+<!-- ===== ANUNCIOS ===== -->
+<div class="page" id="page-anuncios">
+  <div class="tc">
+    <div class="tt"><div class="ttitle">Anuncios activos — 3 anuncios</div></div>
+    <div style="padding:14px 18px;display:flex;flex-direction:column;gap:12px">
+      <div class="ad-box">
+        <div class="ad-status" style="color:var(--green)">● Activo · Search Ad #1 — Alta intención</div>
+        <div class="ad-url">lapuntabeachclub.com › pasadia</div>
+        <div class="ad-title">Pasadía en Cartagena | La Punta Beach Club — Reserva Hoy</div>
+        <div class="ad-desc">Vive el Caribe a 15 min de Cartagena en Fénix Beach. Playa privada, DJ, almuerzo y más. Todo incluido desde $200.000 COP/persona. ¡Cupos limitados!</div>
+        <div class="ad-exts">
+          <span class="ad-ext">📍 Tierra Bomba · Fénix Beach</span>
+          <span class="ad-ext">📞 WhatsApp directo</span>
+          <span class="ad-ext">✓ Transporte incluido</span>
+          <span class="ad-ext">✓ Almuerzo incluido</span>
+        </div>
+      </div>
+      <div class="ad-box">
+        <div class="ad-status" style="color:var(--green)">● Activo · Search Ad #2 — Turista en Cartagena</div>
+        <div class="ad-url">lapuntabeachclub.com › que-hacer-cartagena</div>
+        <div class="ad-title">¿Qué Hacer en Cartagena Hoy? | Pasadía La Punta Beach Club</div>
+        <div class="ad-desc">El plan perfecto para tu día en Cartagena. Playa, música, gastronomía y relajación. A solo 15 minutos en lancha. Reserva en minutos por WhatsApp.</div>
+        <div class="ad-exts">
+          <span class="ad-ext">⭐ 4.9 · Mejor beach club</span>
+          <span class="ad-ext">🚤 Lancha incluida</span>
+          <span class="ad-ext">✓ All-inclusive</span>
+        </div>
+      </div>
+      <div class="ad-box featured">
+        <div class="ad-status" style="color:var(--blue)">● Activo · Performance Max — Google Hotels, Maps, Display, YouTube</div>
+        <div class="ad-url">Google Hotels · Google Maps · Display · YouTube</div>
+        <div class="ad-title">La Punta Beach Club — Pasadía desde $200.000 COP</div>
+        <div class="ad-desc">Ficha activa en Google Hotels y Maps con precio, fotos y botón de reserva. Aparece también en Display y YouTube para capturar audiencias nuevas y hacer remarketing.</div>
+        <div class="ad-exts">
+          <span class="ad-ext" style="color:var(--blue);border-color:#c5d9f8">PMax activo ✓</span>
+          <span class="ad-ext" style="color:var(--blue);border-color:#c5d9f8">Remarketing activado</span>
+          <span class="ad-ext" style="color:var(--blue);border-color:#c5d9f8">12 fotos cargadas</span>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- MOCKUP DE LA APP - agregar dentro de page-anuncios -->
+<div class="tc" id="hl-app-mockup" style="margin-top:14px">
+  <div class="tt"><div class="ttitle">📱 Vista previa — App La Punta Beach Club</div></div>
+  <div style="padding:20px;display:flex;gap:20px;flex-wrap:wrap;justify-content:center">
+
+    <!-- PANTALLA 1: Home / Reserva -->
+    <div style="width:240px;background:#0f9e75;border-radius:24px;padding:8px;box-shadow:0 8px 24px rgba(0,0,0,.15)">
+      <div style="background:#fff;border-radius:18px;overflow:hidden;min-height:420px">
+        <div style="background:linear-gradient(135deg,#0f9e75,#085041);color:#fff;padding:16px;text-align:center">
+          <div style="font-size:13px;font-weight:600">La Punta Beach Club</div>
+          <div style="font-size:10px;opacity:.8;margin-top:2px">Fénix Beach · Tierra Bomba</div>
+        </div>
+        <div style="padding:12px">
+          <div style="background:#fff9e6;border:1px solid #f9ab00;border-radius:10px;padding:8px 10px;font-size:10px;color:#7c4d00;margin-bottom:10px;text-align:center;font-weight:600">
+            🎉 10% OFF en tu primera reserva por la app
+          </div>
+          <div style="font-size:11px;font-weight:600;color:#3c4043;margin-bottom:6px">Elige tu plan</div>
+          <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px">
+            <div style="border:2px solid #0f9e75;background:#e6f4ea;border-radius:10px;padding:8px 10px;display:flex;justify-content:space-between;align-items:center">
+              <div><div style="font-size:11px;font-weight:600;color:#202124">Plan Clásico</div><div style="font-size:9px;color:#5f6368">Lancha + Almuerzo + Piscina</div></div>
+              <div style="font-size:11px;font-weight:600;color:#0f9e75">$200.000</div>
+            </div>
+            <div style="border:1px solid #dadce0;border-radius:10px;padding:8px 10px;display:flex;justify-content:space-between;align-items:center">
+              <div><div style="font-size:11px;font-weight:600;color:#202124">Plan Bonfire</div><div style="font-size:9px;color:#5f6368">+ Fogata nocturna</div></div>
+              <div style="font-size:11px;font-weight:600;color:#5f6368">$240.000</div>
+            </div>
+            <div style="border:1px solid #dadce0;border-radius:10px;padding:8px 10px;display:flex;justify-content:space-between;align-items:center">
+              <div><div style="font-size:11px;font-weight:600;color:#202124">Plan Familiar</div><div style="font-size:9px;color:#5f6368">Grupos 6+ personas</div></div>
+              <div style="font-size:11px;font-weight:600;color:#5f6368">$260.000</div>
+            </div>
+          </div>
+          <button style="width:100%;background:#0f9e75;color:#fff;border:none;border-radius:10px;padding:10px;font-size:12px;font-weight:600;cursor:default">Continuar →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANTALLA 2: Personalización -->
+    <div style="width:240px;background:#1a73e8;border-radius:24px;padding:8px;box-shadow:0 8px 24px rgba(0,0,0,.15)">
+      <div style="background:#fff;border-radius:18px;overflow:hidden;min-height:420px">
+        <div style="padding:14px;border-bottom:1px solid #e8eaed">
+          <div style="font-size:12px;font-weight:600;color:#202124">Personaliza tu pasadía</div>
+        </div>
+        <div style="padding:12px">
+          <div style="font-size:10px;font-weight:600;color:#5f6368;margin-bottom:5px;text-transform:uppercase">Menú del almuerzo</div>
+          <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:12px">
+            <div style="border:2px solid #1a73e8;background:#e8f0fe;border-radius:8px;padding:7px 10px;font-size:11px;color:#1558d6;font-weight:600">🦐 Mariscos</div>
+            <div style="border:1px solid #dadce0;border-radius:8px;padding:7px 10px;font-size:11px;color:#5f6368">🥩 Carnes</div>
+            <div style="border:1px solid #dadce0;border-radius:8px;padding:7px 10px;font-size:11px;color:#5f6368">🥗 Vegetariano</div>
+          </div>
+          <div style="font-size:10px;font-weight:600;color:#5f6368;margin-bottom:5px;text-transform:uppercase">Horario de salida</div>
+          <div style="display:flex;gap:5px;margin-bottom:12px">
+            <div style="flex:1;border:2px solid #1a73e8;background:#e8f0fe;border-radius:8px;padding:6px;text-align:center;font-size:10px;color:#1558d6;font-weight:600">9:00 AM</div>
+            <div style="flex:1;border:1px solid #dadce0;border-radius:8px;padding:6px;text-align:center;font-size:10px;color:#5f6368">10:30 AM</div>
+          </div>
+          <div style="font-size:10px;font-weight:600;color:#5f6368;margin-bottom:5px;text-transform:uppercase">Personas</div>
+          <div style="display:flex;align-items:center;gap:10px;border:1px solid #dadce0;border-radius:8px;padding:6px 10px;margin-bottom:12px">
+            <span style="font-size:14px;color:#1a73e8;font-weight:700">−</span>
+            <span style="flex:1;text-align:center;font-size:12px;font-weight:600">4 personas</span>
+            <span style="font-size:14px;color:#1a73e8;font-weight:700">+</span>
+          </div>
+          <div style="font-size:10px;font-weight:600;color:#5f6368;margin-bottom:5px;text-transform:uppercase">Extras</div>
+          <div style="display:flex;flex-direction:column;gap:5px">
+            <div style="display:flex;justify-content:space-between;border:1px solid #dadce0;border-radius:8px;padding:6px 10px;font-size:10px"><span>📸 Sesión de fotos</span><span style="color:#1a73e8;font-weight:600">+$50.000</span></div>
+            <div style="display:flex;justify-content:space-between;border:1px solid #dadce0;border-radius:8px;padding:6px 10px;font-size:10px"><span>🎂 Decoración cumpleaños</span><span style="color:#1a73e8;font-weight:600">+$80.000</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANTALLA 3: Tienda de extras + fidelización -->
+    <div style="width:240px;background:#f9ab00;border-radius:24px;padding:8px;box-shadow:0 8px 24px rgba(0,0,0,.15)">
+      <div style="background:#fff;border-radius:18px;overflow:hidden;min-height:420px">
+        <div style="padding:14px;border-bottom:1px solid #e8eaed;display:flex;justify-content:space-between;align-items:center">
+          <div style="font-size:12px;font-weight:600;color:#202124">Tienda y beneficios</div>
+          <div style="background:#e6f4ea;color:#0a5c36;font-size:9px;font-weight:700;padding:3px 8px;border-radius:10px">⭐ 240 pts</div>
+        </div>
+        <div style="padding:12px">
+          <div style="font-size:10px;font-weight:600;color:#5f6368;margin-bottom:6px;text-transform:uppercase">Experiencias adicionales</div>
+          <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px">
+            <div style="display:flex;justify-content:space-between;align-items:center;border:1px solid #dadce0;border-radius:8px;padding:8px 10px">
+              <div><div style="font-size:11px;font-weight:600">🚤 Jet Ski (30 min)</div><div style="font-size:9px;color:#5f6368">Por persona</div></div>
+              <div style="font-size:11px;font-weight:600;color:#f9ab00">$90.000</div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;border:1px solid #dadce0;border-radius:8px;padding:8px 10px">
+              <div><div style="font-size:11px;font-weight:600">💆 Masaje en playa</div><div style="font-size:9px;color:#5f6368">60 minutos</div></div>
+              <div style="font-size:11px;font-weight:600;color:#f9ab00">$120.000</div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;border:1px solid #dadce0;border-radius:8px;padding:8px 10px">
+              <div><div style="font-size:11px;font-weight:600">🍹 Cóctel premium</div><div style="font-size:9px;color:#5f6368">Pre-orden</div></div>
+              <div style="font-size:11px;font-weight:600;color:#f9ab00">$35.000</div>
+            </div>
+          </div>
+          <div style="background:#fff9e6;border:1px solid #f9ab00;border-radius:10px;padding:10px;text-align:center">
+            <div style="font-size:10px;color:#7c4d00;margin-bottom:4px">🎁 Te faltan 60 pts para tu próxima pasadía gratis</div>
+            <div style="background:#f1f3f4;border-radius:10px;height:6px;overflow:hidden"><div style="width:80%;height:100%;background:#f9ab00"></div></div>
+          </div>
+          <div style="margin-top:10px;text-align:center;font-size:9px;color:#9aa0a6">📲 Comparte tu código y gana descuentos</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div style="padding:0 18px 16px;font-size:11px;color:#5f6368;line-height:1.6;text-align:center">
+    Ejemplo de cómo se vería la app: selección de plan, personalización del menú y horario, y tienda de experiencias adicionales con sistema de puntos. Lista en 2 semanas · $3.980.000 COP + IVA
+  </div>
+</div>
+
+</div>
+
+<!-- ===== PALABRAS CLAVE ===== -->
+<div class="page" id="page-palabras">
+  <div class="tc" id="hl-kw1" style="margin-bottom:14px">
+    <div class="tt"><div class="ttitle">Palabras clave — Alta intención de compra</div></div>
+    <table>
+      <thead><tr><th></th><th>Palabra clave</th><th>Tipo</th><th>CPC est.</th><th>Clics</th><th>Conv.</th></tr></thead>
+      <tbody>
+        <tr><td><span class="sdot da"></span></td><td>"pasadía cartagena"</td><td><span class="mp mph">Frase</span></td><td>$2.800</td><td>—</td><td>—</td></tr>
+        <tr><td><span class="sdot da"></span></td><td>"beach club cartagena"</td><td><span class="mp mph">Frase</span></td><td>$2.500</td><td>—</td><td>—</td></tr>
+        <tr><td><span class="sdot da"></span></td><td>"day pass cartagena"</td><td><span class="mp mph">Frase</span></td><td>$2.200</td><td>—</td><td>—</td></tr>
+        <tr><td><span class="sdot da"></span></td><td>"playa privada cartagena"</td><td><span class="mp mph">Frase</span></td><td>$2.100</td><td>—</td><td>—</td></tr>
+        <tr><td><span class="sdot da"></span></td><td>"qué hacer en cartagena"</td><td><span class="mp mph">Frase</span></td><td>$1.900</td><td>—</td><td>—</td></tr>
+        <tr><td><span class="sdot da"></span></td><td>"tierra bomba pasadía"</td><td><span class="mp mph">Frase</span></td><td>$1.800</td><td>—</td><td>—</td></tr>
+        <tr><td><span class="sdot da"></span></td><td>[la punta beach club]</td><td><span class="mp mpe">Exacta</span></td><td>$3.200</td><td>—</td><td>—</td></tr>
+        <tr><td><span class="sdot da"></span></td><td>"all inclusive cartagena"</td><td><span class="mp mph">Frase</span></td><td>$2.300</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tc" id="hl-competencia" style="margin-bottom:14px">
+    <div class="tt"><div class="ttitle">Palabras clave — Captura de tráfico de competencia</div></div>
+    <table>
+      <thead><tr><th></th><th>Palabra clave</th><th>Tipo</th><th>Estrategia</th></tr></thead>
+      <tbody>
+        <tr><td><span class="sdot dp"></span></td><td>"bora bora beach club"</td><td><span class="mp mpb">Amplia mod.</span></td><td><span class="comp-tag">Interceptar competencia</span></td></tr>
+        <tr><td><span class="sdot dp"></span></td><td>"makani beach club"</td><td><span class="mp mpb">Amplia mod.</span></td><td><span class="comp-tag">Interceptar competencia</span></td></tr>
+        <tr><td><span class="sdot dp"></span></td><td>"blue apple beach"</td><td><span class="mp mpb">Amplia mod.</span></td><td><span class="comp-tag">Interceptar competencia</span></td></tr>
+        <tr><td><span class="sdot dp"></span></td><td>"mejores beach club cartagena"</td><td><span class="mp mph">Frase</span></td><td><span class="comp-tag">Interceptar competencia</span></td></tr>
+        <tr><td><span class="sdot da"></span></td><td>"fenix beach"</td><td><span class="mp mpe">Exacta</span></td><td><span style="background:var(--gl);color:var(--green);font-size:10px;padding:2px 8px;border-radius:20px">Aprovechar ubicación</span></td></tr>
+        <tr><td><span class="sdot da"></span></td><td>"pasadía fenix cartagena"</td><td><span class="mp mph">Frase</span></td><td><span style="background:var(--gl);color:var(--green);font-size:10px;padding:2px 8px;border-radius:20px">Aprovechar ubicación</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tc">
+    <div class="tt"><div class="ttitle">Palabras clave negativas</div></div>
+    <div style="padding:12px 16px">
+      <span class="neg-tag">gratis</span><span class="neg-tag">barato</span><span class="neg-tag">económico</span><span class="neg-tag">hostal</span><span class="neg-tag">trabajo</span><span class="neg-tag">empleo</span><span class="neg-tag">voluntariado</span><span class="neg-tag">camping</span><span class="neg-tag">como llegar</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FICHA HOTELS ===== -->
+<div class="page" id="page-hotel">
+  <div style="font-size:12px;color:var(--g6);margin-bottom:12px">Vista previa — así aparece La Punta en Google Hotels, Google Maps y búsquedas de Google</div>
+  <div class="hp" id="hl-hotel">
+    <div class="hp-strip">
+      <div class="hp-thumb">🏖️</div><div class="hp-thumb">🌊</div><div class="hp-thumb">🍹</div><div class="hp-thumb">🎵</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.7);margin-left:6px">+8 fotos</div>
+    </div>
+    <div class="hp-meta">
+      <div class="hp-info">
+        <div class="hp-name">La Punta Beach Club</div>
+        <div class="hp-addr">📍 Fénix Beach · Tierra Bomba, Cartagena · 15 min en lancha</div>
+        <div class="hp-stars">★★★★★</div>
+        <div style="display:flex;align-items:center;gap:7px;margin-top:3px">
+          <span style="font-size:13px;font-weight:500;color:var(--g8)">4.9</span>
+          <div style="flex:1;max-width:100px;height:5px;background:var(--g3);border-radius:3px;overflow:hidden"><div style="width:98%;height:100%;background:#FBBC05;border-radius:3px"></div></div>
+          <span style="font-size:11px;color:var(--g6)">95% recomendado</span>
+        </div>
+        <div class="hp-tags">
+          <span class="hp-tag" style="background:var(--gl);color:var(--green)">✓ All-inclusive</span>
+          <span class="hp-tag" style="background:var(--bl);color:var(--blue)">🚤 Lancha incluida</span>
+          <span class="hp-tag" style="background:var(--al);color:#7c4d00">🎵 DJ en vivo</span>
+          <span class="hp-tag" style="background:var(--g2);color:var(--g7)">🍽️ Almuerzo incluido</span>
+        </div>
+        <div class="hp-ctas">
+          <button class="hp-book">Reservar pasadía</button>
+          <button class="hp-map">Ver en Maps</button>
+          <button class="hp-wa">💬 WhatsApp</button>
+        </div>
+      </div>
+      <div class="hp-price">
+        <div class="hp-from">Desde</div>
+        <div class="hp-num">$200.000</div>
+        <div class="hp-sub">COP · por persona · 12h</div>
+        <div style="margin-top:7px;font-size:11px;color:var(--green)">● Disponible hoy</div>
+        <div style="font-size:11px;color:var(--g6);margin-top:2px">Salidas 9:30am – 1:30pm</div>
+      </div>
+    </div>
+  </div>
+  <div class="sc">
+    <div class="sc-head"><div class="sc-title">Estado en Google Hotels y Maps</div></div>
+    <div class="sr"><span class="sk">Estado</span><span class="sv gr">● Ficha activa y verificada</span></div>
+    <div class="sr"><span class="sk">Fotos</span><span class="sv gr">12 fotos cargadas ✓</span></div>
+    <div class="sr"><span class="sk">Precio</span><span class="sv">Desde $200.000 COP/persona</span></div>
+    <div class="sr"><span class="sk">Botón reserva</span><span class="sv gr">WhatsApp + Web activo ✓</span></div>
+    <div class="sr"><span class="sk">Posición Maps</span><span class="sv bl">Top 3 · "pasadía cartagena"</span></div>
+    <div class="sr"><span class="sk">Ubicación</span><span class="sv">Fénix Beach · Tierra Bomba</span></div>
+  </div>
+</div>
+
+<!-- ===== CHAT IA ===== -->
+<div class="page" id="page-chat" style="padding:18px">
+  <div class="tc">
+    <div class="tt"><div class="ttitle">📩 Enviar correcciones o sugerencias</div></div>
+    <div style="padding:24px 20px;text-align:center">
+      <div style="font-size:40px;margin-bottom:10px">✉️</div>
+      <div style="font-size:14px;font-weight:600;color:#202124;margin-bottom:8px">¿Tienes alguna sugerencia o corrección sobre la campaña?</div>
+      <div style="font-size:12px;color:#5f6368;line-height:1.7;margin-bottom:18px;max-width:480px;margin-left:auto;margin-right:auto">
+        Escríbenos directamente a tu ejecutiva de cuenta, <strong>Ana María</strong>, y con gusto revisará tus comentarios y coordinará los siguientes pasos contigo.
+      </div>
+      <a href="mailto:analytics.expert22@comerciosgoogle.com?subject=Sugerencias%20campaña%20La%20Punta%20Beach%20Club" style="display:inline-flex;align-items:center;gap:8px;background:#1a73e8;color:#fff;padding:12px 24px;border-radius:24px;font-size:13px;font-weight:600;text-decoration:none">
+        ✉️ Escribir a Ana María
+      </a>
+      <div style="font-size:11px;color:#9aa0a6;margin-top:12px">analytics.expert22@comerciosgoogle.com</div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<!-- MODAL DATOS -->
+<div class="ov" id="data-ov">
+  <div class="modal">
+    <div class="modal-t">Actualizar métricas reales</div>
+    <div class="modal-s">Copia estos datos desde tu cuenta de Google Ads para ver el panel con cifras reales.</div>
+    <div class="mrow2">
+      <div class="mf"><div class="ml">Impresiones</div><input class="mi" id="m-imp" type="number" placeholder="Ej: 45000"></div>
+      <div class="mf"><div class="ml">Clics</div><input class="mi" id="m-clics" type="number" placeholder="Ej: 1850"></div>
+    </div>
+    <div class="mrow2">
+      <div class="mf"><div class="ml">Inversión (COP)</div><input class="mi" id="m-costo" type="number" placeholder="Ej: 3800000"></div>
+      <div class="mf"><div class="ml">Reservas confirmadas</div><input class="mi" id="m-conv" type="number" placeholder="Ej: 140"></div>
+    </div>
+    <div class="mf"><div class="ml">Ingresos por reservas (COP)</div><input class="mi" id="m-ing" type="number" placeholder="Ej: 21000000"></div>
+    <div class="mbtns">
+      <button class="mcan" onclick="closeDataModal()">Cancelar</button>
+      <button class="msnd" onclick="saveData()">Guardar y actualizar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API_KEY = "";
+const API = 'https://lapunta-proxy.soportegeolocalizacion02.workers.dev/';
+const AGENTE = "analytics.expert22@comerciosgoogle.com";
+
+const SYS = `Eres el asistente de campaña de La Punta Beach Club, Cartagena, Colombia. Tu función es ayudar a LESEK PLEVAC (el dueño del negocio) a entender su campaña de Google Ads y registrar sus sugerencias para enviárselas a ANA MARÍA GÓMEZ (la agente de Google Ads).
+
+DATOS DEL NEGOCIO:
+- Nombre: La Punta Beach Club
+- Ubicación: Dentro de Fénix Beach, Tierra Bomba, Cartagena. 15 min en lancha.
+- Producto: Pasadías all-inclusive. $200.000–$260.000 COP/persona. 12 horas.
+- Incluye: transporte en lancha, DJ en vivo, almuerzo gourmet, piscina, playa privada.
+- Rating: 4.9 ⭐, 95% recomendado.
+
+ESTRATEGIA DE CAMPAÑA (diseñada por el equipo, gestionada por Ana María Gómez):
+- Objetivo principal: captar turistas que YA ESTÁN en Cartagena buscando actividades ese mismo día o el anterior.
+- Presupuesto total: $4.000.000 COP/mes ($133.000 COP/día)
+
+ESTRUCTURA:
+1. Campaña Search (70% = $2.800.000 COP): Captura intención inmediata. Palabras como "pasadía cartagena", "beach club cartagena", "qué hacer en cartagena", "day pass cartagena", "playa privada cartagena".
+2. Campaña Performance Max (30% = $1.200.000 COP): Visibilidad en Search, Display, Maps, YouTube + Remarketing a visitantes que no convirtieron.
+
+ESTRATEGIA DE CAPTURA DE COMPETENCIA:
+La campaña aparece cuando buscan: "bora bora beach club", "makani beach club", "blue apple beach", "mejores beach club cartagena".
+También captura tráfico de Fénix Beach: "fenix beach", "pasadía fenix cartagena" (La Punta opera DENTRO de Fénix — esto es una ventaja, no competencia).
+
+COMPETENCIA DIRECTA: Bora Bora Beach Club, Makani Luxury Beach Club, Blue Apple Beach House.
+
+SEGMENTACIÓN: Bogotá (prioridad alta), Medellín (prioridad alta), Cali, Bucaramanga, turistas ya en Cartagena, EEUU, España.
+
+PROYECCIONES MENSUALES:
+- Leads generados: 320 contactos
+- Reservas: 140 pasadías
+- Ingresos estimados: $21.000.000 COP
+- ROAS: 5x
+- Costo por reserva: $28.500 COP
+
+KPIs: número de reservas, costo por reserva, costo por contacto, tasa de conversión, ROAS, ocupación diaria.
+
+PLAN DE IMPLEMENTACIÓN: 1) Config. técnica → 2) Creación campañas → 3) Seguimiento conversiones → 4) Lanzamiento → 5) Optimización semanal → 6) Reporte mensual.
+
+REGLAS:
+1. Responde en español claro y amigable. Explica términos técnicos con palabras simples.
+2. Si Lesek sugiere cualquier cambio (presupuesto, ciudades, palabras clave, horario, anuncios, estrategia), confírmalo y termina con: "📋 SUGERENCIA REGISTRADA: [describe el cambio en 1 línea]"
+3. Sé específico para La Punta. Nada genérico.
+4. Tono cálido y profesional — eres el aliado de Lesek.`;
+
+let history=[], suggestions=[], msgCount=0, chartInst=null, curM='clics', datos={};
+
+// TABS
+function switchTab(el,id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('page-'+id).classList.add('active');
+}
+
+// CHART
+function buildChart(){
+  const ctx=document.getElementById('mc');
+  const d={
+    clics:[180,420,720,datos.clics||980],
+    imp:[5000,12000,20000,datos.imp||28000],
+    conv:[25,65,105,datos.conv||140],
+    costo:[700000,1700000,2800000,datos.costo||3800000]
+  };
+  if(chartInst)chartInst.destroy();
+  chartInst=new Chart(ctx,{
+    type:'line',
+    data:{labels:['Sem 1','Sem 2','Sem 3','Sem 4'],datasets:[{data:d[curM],borderColor:'#1a73e8',backgroundColor:'rgba(26,115,232,.07)',fill:true,tension:0.4,pointBackgroundColor:'#1a73e8',pointRadius:4,borderWidth:2}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:10},callback:v=>curM==='costo'?'$'+Math.round(v/1000)+'K':Math.round(v).toLocaleString()}},x:{grid:{display:false},ticks:{font:{size:10}}}}}
+  });
+}
+function switchChart(el,m){
+  document.querySelectorAll('.ctab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active'); curM=m; buildChart();
+}
+buildChart();
+
+// DATA MODAL
+function openDataModal(){document.getElementById('data-ov').classList.add('open');}
+function closeDataModal(){document.getElementById('data-ov').classList.remove('open');}
+function fN(n){return Math.round(n).toLocaleString('es-CO');}
+function fCOP(n){return n>=1000000?'$'+(n/1000000).toFixed(1)+'M':'$'+Math.round(n/1000)+'K';}
+
+function saveData(){
+  const imp=parseInt(document.getElementById('m-imp').value)||0;
+  const clics=parseInt(document.getElementById('m-clics').value)||0;
+  const costo=parseInt(document.getElementById('m-costo').value)||0;
+  const conv=parseInt(document.getElementById('m-conv').value)||0;
+  const ing=parseInt(document.getElementById('m-ing').value)||0;
+  if(!imp&&!clics){alert('Ingresa al menos impresiones y clics.');return;}
+  datos={imp,clics,costo,conv,ing};
+  const ctr=clics&&imp?(clics/imp*100).toFixed(2)+'%':'—';
+  const roas=ing&&costo?(ing/costo).toFixed(1)+'x':'—';
+  const ctrN=clics&&imp?clics/imp*100:0;
+  document.getElementById('v-imp').textContent=fN(imp);
+  document.getElementById('v-imp').className='mc-val';
+  document.getElementById('v-clics').textContent=fN(clics);
+  document.getElementById('v-clics').className='mc-val';
+  document.getElementById('v-ctr').textContent=ctr;
+  document.getElementById('v-ctr').className='mc-val';
+  document.getElementById('v-costo').textContent=fCOP(costo)+' COP';
+  document.getElementById('v-costo').className='mc-val';
+  document.getElementById('v-conv').textContent=conv?fN(conv)+'':'—';
+  document.getElementById('v-conv').className='mc-val';
+  document.getElementById('v-roas').textContent=roas;
+  document.getElementById('v-roas').className='mc-val';
+  document.getElementById('d-imp').textContent='↑ campaña activa'; document.getElementById('d-imp').className='mc-delta up';
+  document.getElementById('d-clics').textContent=clics>0?'↑ en crecimiento':'esperando'; document.getElementById('d-clics').className='mc-delta up';
+  document.getElementById('d-ctr').textContent=ctrN>=4?'↑ sobre objetivo 4%':'↓ mejorar copy'; document.getElementById('d-ctr').className='mc-delta '+(ctrN>=4?'up':'dn');
+  document.getElementById('d-costo').textContent=`${fCOP(costo)} de $4M presup.`; document.getElementById('d-costo').className='mc-delta neu';
+  document.getElementById('d-conv').textContent=conv?`${conv} de 140 objetivo`:'sin reservas aún'; document.getElementById('d-conv').className='mc-delta '+(conv>=140?'up':'neu');
+  document.getElementById('d-roas').textContent=roas!='—'?(parseFloat(roas)>=5?'↑ objetivo 5x alcanzado':'↑ buen retorno'):'sin datos'; document.getElementById('d-roas').className='mc-delta '+(roas!='—'?'up':'neu');
+  const db=document.getElementById('dbar');
+  db.style.background='var(--gl)';db.style.borderColor='#34A853';db.style.color='#0a5c36';
+  db.innerHTML='✅&nbsp;<strong>Datos actualizados.</strong> Panel con cifras reales de Google Ads. <button class="dbar-btn" style="background:#34A853;color:#fff" onclick="openDataModal()">Actualizar</button>';
+  updateIns(ctrN,roas,conv,costo);
+  buildChart();
+  closeDataModal();
+}
+function updateIns(ctr,roas,conv,costo){
+  let h='';
+  h+=ctr<4?`<div class="ins warn"><div class="ins-ico">⚠️</div><div class="ins-t">CTR bajo — acción requerida</div><div class="ins-d">CTR actual por debajo del 4% objetivo. Ana María debe revisar el copy de los anuncios.</div></div>`:`<div class="ins good"><div class="ins-ico">✅</div><div class="ins-t">CTR saludable</div><div class="ins-d">CTR sobre el 4% objetivo. Los anuncios están funcionando bien.</div></div>`;
+  if(conv>0)h+=`<div class="ins good"><div class="ins-ico">🎯</div><div class="ins-t">${conv} reservas generadas</div><div class="ins-d">Costo por reserva: ${fCOP(Math.round(costo/conv))} COP. ${conv>=140?'¡Objetivo mensual alcanzado!':'Ritmo en crecimiento.'}</div></div>`;
+  h+=`<div class="ins tip"><div class="ins-ico">💡</div><div class="ins-t">IA disponible</div><div class="ins-d">Usa el Asistente IA para analizar resultados y enviar sugerencias de cambio a Ana María.</div></div>`;
+  document.getElementById('ins-row').innerHTML=h;
+}
+
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+</script>
+<!-- WIDGET DE VOZ INTERACTIVO - agregar antes de </body> -->
+<style>
+.voice-highlight {
+  animation: voiceGlow 1.6s ease-in-out infinite;
+  border-radius: 16px !important;
+  position: relative;
+  z-index: 5;
+  scroll-margin-top: 90px;
+}
+@keyframes voiceGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(15,158,117,.55), 0 0 0 0 rgba(26,115,232,.0); border-color: #0f9e75 !important; }
+  50% { box-shadow: 0 0 0 8px rgba(15,158,117,.12), 0 0 24px rgba(15,158,117,.25); border-color: #0f9e75 !important; }
+}
+</style>
+
+<div id="voice-widget" style="position:fixed;bottom:20px;right:20px;z-index:1000;font-family:'Google Sans',Roboto,sans-serif;display:flex;flex-direction:column;align-items:flex-end;gap:10px;max-width:340px">
+
+  <div id="chapter-list" style="display:none;background:#fff;border:1px solid #dadce0;border-radius:14px;padding:14px 16px;font-size:12px;color:#3c4043;max-width:320px;max-height:280px;overflow-y:auto;box-shadow:0 4px 20px rgba(0,0,0,.15)">
+    <div style="font-weight:600;margin-bottom:10px;color:#202124;font-size:13px">📚 Explicación por capítulos</div>
+    <div id="chapter-items"></div>
+  </div>
+
+  <div id="voice-progress" style="display:none;background:#fff;border:1px solid #dadce0;border-radius:14px;padding:14px 16px;font-size:12px;color:#5f6368;max-width:320px;box-shadow:0 4px 20px rgba(0,0,0,.15)">
+    <div id="voice-chapter-title" style="font-weight:600;color:#0f9e75;margin-bottom:6px;font-size:12px"></div>
+    <div id="voice-text" style="line-height:1.65"></div>
+    <div style="margin-top:10px;display:flex;gap:6px">
+      <button onclick="prevChapter()" style="flex:1;padding:6px;border:1px solid #dadce0;background:#fff;border-radius:8px;font-size:11px;cursor:pointer;color:#5f6368">⏮ Anterior</button>
+      <button onclick="nextChapter()" style="flex:1;padding:6px;border:1px solid #dadce0;background:#fff;border-radius:8px;font-size:11px;cursor:pointer;color:#5f6368">Siguiente ⏭</button>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+    <button id="chapters-btn" onclick="toggleChapters()" style="display:flex;align-items:center;gap:8px;padding:13px 18px;background:#fff;color:#5f6368;border:1px solid #dadce0;border-radius:30px;font-size:13px;font-weight:500;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.1)">
+      <span>📚</span><span>Capítulos</span>
+    </button>
+
+    <button id="voice-btn" onclick="toggleVoice()" style="display:flex;align-items:center;gap:8px;padding:13px 20px;background:#0f9e75;color:#fff;border:none;border-radius:30px;font-size:13px;font-weight:500;cursor:pointer;box-shadow:0 4px 14px rgba(15,158,117,.4)">
+      <span id="voice-icon">🔊</span>
+      <span id="voice-label">Escuchar explicación completa</span>
+    </button>
+  </div>
+</div>
+
+<script>
+const CHAPTERS = [
+  {
+    title: "1. Bienvenida y resumen general",
+    page: "resumen", highlight: "hl-metrics",
+    text: "Hola Lesek. Soy el asistente de voz de La Punta Beach Club, y voy a explicarte con detalle cómo está configurada tu campaña de publicidad en Google. Esta explicación está dividida en varios capítulos, para que entiendas exactamente en qué se está invirtiendo tu dinero y qué resultados puedes esperar. A medida que vaya hablando, el panel te irá mostrando automáticamente la sección correspondiente, para que puedas ver mientras escuchas. Empecemos."
+  },
+  {
+    title: "2. ¿Dónde está ubicada La Punta?",
+    page: "hotel", highlight: "hl-hotel",
+    text: "La Punta Beach Club está ubicada dentro de Fénix Beach, en la isla de Tierra Bomba, a solo quince minutos en lancha desde el centro de Cartagena. Esta ubicación es una ventaja muy importante, porque Fénix Beach ya es un destino conocido por los turistas. Eso significa que cuando alguien busca en Google información sobre Fénix Beach, La Punta también puede aparecer, aprovechando esa visibilidad. Además, al estar tan cerca de Cartagena, es un destino ideal para personas que ya están en la ciudad y buscan un plan de playa para ese mismo día."
+  },
+  {
+    title: "3. ¿Qué se ofrece exactamente?",
+    page: "hotel", highlight: "hl-hotel",
+    text: "El producto principal es la pasadía todo incluido. El precio va desde doscientos mil pesos colombianos hasta doscientos sesenta mil pesos colombianos por persona, dependiendo de la temporada. La experiencia incluye varias cosas: primero, el transporte en lancha de ida y vuelta desde Cartagena. Segundo, música en vivo con DJ durante el día. Tercero, un almuerzo tipo gourmet incluido en el precio. Y cuarto, acceso libre a la piscina y a la playa privada. Es una experiencia de doce horas, pensada para que el turista disfrute un día completo sin preocuparse por nada más."
+  },
+  {
+    title: "4. El presupuesto: cuatro millones de pesos",
+    page: "campana", highlight: "hl-kpis",
+    text: "Ahora hablemos de dinero. La inversión mensual en publicidad es de cuatro millones de pesos colombianos. Para que tengas una referencia, esto equivale aproximadamente a ciento treinta y tres mil pesos diarios. Este presupuesto se divide en dos partes, que son las dos campañas de Google Ads. Vamos a explicar cada una en detalle en los siguientes capítulos."
+  },
+  {
+    title: "5. Campaña uno: Google Search, el setenta por ciento",
+    page: "campana", highlight: "hl-search",
+    text: "La primera campaña se llama Google Search, y recibe el setenta por ciento del presupuesto total. Eso son dos millones ochocientos mil pesos colombianos al mes. ¿Qué hace esta campaña? Aparece cuando alguien escribe directamente en Google frases como, pasadía Cartagena, beach club Cartagena, día de playa Cartagena, playa privada Cartagena, o qué hacer en Cartagena. Estas son personas que ya están buscando activamente un plan, es decir, tienen una intención de compra muy alta. Por eso esta campaña recibe la mayor parte del presupuesto: porque está dirigida a las personas con más probabilidad de reservar."
+  },
+  {
+    title: "6. Campaña dos: Performance Max, el treinta por ciento",
+    page: "campana", highlight: "hl-pmax",
+    text: "La segunda campaña se llama Performance Max, y recibe el treinta por ciento del presupuesto, es decir, un millón doscientos mil pesos colombianos al mes. Esta campaña es diferente: en lugar de aparecer solo en búsquedas de Google, se muestra en varios lugares al mismo tiempo. Aparece en Google Hotels, que es la sección donde la gente compara hospedajes y experiencias antes de reservar. Aparece también en Google Maps, cuando alguien explora qué hacer cerca de su ubicación actual. Y aparece en la red de Display, que son anuncios visuales en miles de páginas web y aplicaciones. Además, esta campaña incluye remarketing, que significa mostrarle anuncios otra vez a las personas que visitaron tu página pero no reservaron, para recordarles e invitarlas a completar la reserva."
+  },
+  {
+    title: "7. ¿Cómo ven hoy a La Punta los usuarios?",
+    page: "resumen", highlight: "ins-row",
+    text: "Antes de hablar de la nueva estrategia, es importante entender el punto de partida. Hoy en día, cuando un turista busca en Google opciones de playa cerca de Cartagena, La Punta Beach Club tiene muy poca visibilidad. Aparece de forma orgánica, es decir, sin pago, y compite en igualdad de condiciones con docenas de otros negocios que sí están invirtiendo en publicidad. Esto significa que, aunque La Punta tenga una excelente calificación, con cuatro punto nueve estrellas y noventa y cinco por ciento de recomendación, esa calidad no se está traduciendo en visibilidad ni en reservas, porque simplemente el negocio no aparece cuando las personas están buscando. Es como tener el mejor restaurante de la ciudad, pero sin un letrero en la calle: la gente no lo encuentra, aunque esté cerca."
+  },
+  {
+    title: "8. Hacia dónde se dirige la campaña: ventas y reconocimiento",
+    page: "resumen", highlight: "ins-row",
+    text: "La nueva estrategia tiene dos objetivos que trabajan juntos: generar ventas inmediatas, y construir reconocimiento de marca a largo plazo. Para las ventas inmediatas, la campaña de Search se enfoca en personas que ya están decididas a hacer un plan de playa, capturándolas justo en el momento de la búsqueda, cuando la intención de compra es más alta. Para el reconocimiento de marca, la campaña de Performance Max trabaja de forma más amplia: aunque una persona no reserve en su primera visita, queda expuesta a la marca La Punta Beach Club en Google Hotels, en Maps, o en anuncios mientras navega por internet. La próxima vez que esa persona piense en un plan de playa en Cartagena, La Punta ya será un nombre conocido para ella. Con el tiempo, esta combinación logra que más personas conozcan la marca, que más personas reserven, y que la posición de La Punta en los resultados de búsqueda mejore frente a la competencia."
+  },
+  {
+    title: "9. Estrategia de competencia: interceptar clientes",
+    page: "palabras", highlight: "hl-competencia",
+    text: "Una de las estrategias más inteligentes de esta campaña es la captura de tráfico de la competencia. Esto significa que tu anuncio puede aparecer cuando alguien busca específicamente otros beach clubs de la zona, como Bora Bora Beach Club, Makani Beach Club, o Blue Apple Beach. Es como decir, si alguien está pensando en ir a Bora Bora, también le mostramos la opción de La Punta, para que la considere antes de decidirse. Esto es completamente normal y permitido en publicidad digital, y es una forma muy efectiva de ganar clientes que de otra forma irían directo a la competencia."
+  },
+  {
+    title: "10. Las palabras clave: qué activa tus anuncios",
+    page: "palabras", highlight: "hl-kw1",
+    text: "Las palabras clave son los términos que las personas escriben en Google, y que hacen que tu anuncio aparezca. Las principales son: pasadía Cartagena, beach club Cartagena, day pass Cartagena, playa privada Cartagena, qué hacer en Cartagena, tierra bomba pasadía, y el nombre exacto, La Punta Beach Club. También hay palabras clave negativas, que son términos para los que NO quieres que aparezca tu anuncio, porque no son relevantes. Por ejemplo: gratis, barato, económico, hostal, trabajo, o empleo. Esto evita gastar dinero en clics de personas que no son clientes potenciales."
+  },
+  {
+    title: "11. Proyección de resultados esperados",
+    page: "resumen", highlight: "hl-metrics",
+    text: "Ahora viene la parte más importante: qué resultados puedes esperar con esta inversión. Según el comportamiento de campañas similares en el sector turístico de Cartagena, se proyecta lo siguiente cada mes: trescientos veinte contactos o leads, es decir, personas que escriben preguntando información. De esos contactos, se espera que ciento cuarenta se conviertan en reservas efectivas de pasadía. Esto representa unos ingresos estimados de veintiún millones de pesos colombianos al mes. Si comparamos esos veintiún millones de ingresos con los cuatro millones invertidos en publicidad, obtenemos un retorno sobre la inversión de cinco veces. Es decir, por cada peso invertido en publicidad, se espera recuperar cinco pesos en ventas. El costo promedio por cada reserva conseguida sería de aproximadamente veintiocho mil quinientos pesos colombianos."
+  },
+  {
+    title: "12. Cómo se implementará la campaña",
+    page: "campana", highlight: "hl-plan",
+    text: "El proceso de implementación tiene seis pasos. Primero, configuración técnica de la cuenta de Google Ads. Segundo, creación de las campañas y los anuncios, con los textos, imágenes y enlaces correctos. Tercero, configuración del seguimiento de conversiones, que es lo que permite medir cuántas reservas reales se generan desde la publicidad. Cuarto, lanzamiento oficial de la campaña. Quinto, optimización semanal, donde el equipo revisa los resultados y ajusta lo que sea necesario para mejorar el rendimiento. Y sexto, un reporte mensual donde se comparan los resultados reales contra las proyecciones que te acabo de explicar."
+  },
+  {
+    title: "13. Una propuesta: tu propia aplicación móvil",
+    page: "anuncios", highlight: "hl-app-mockup",
+    text: "Quiero compartirte una propuesta que puede llevar a La Punta al siguiente nivel, y que consideramos sería una opción muy potente para el negocio. Actualmente, cuando alguien quiere reservar, lo hace por mensaje de WhatsApp o a través de la página web. Esto funciona, pero tiene límites: no se puede personalizar fácilmente la experiencia, y no hay forma de fidelizar al cliente para que vuelva. Por eso, nuestro equipo te propone desarrollarla en conjunto con nosotros, e integrarla directamente con esta campaña de Google Ads que ya está en marcha. La aplicación estaría lista en dos semanas, con un costo de tres millones novecientos ochenta mil pesos colombianos, más I V A."
+  },
+  {
+    title: "13.1 Lo que las personas podrían personalizar en la app",
+    page: "anuncios", highlight: "hl-app-mockup",
+    text: "Dentro de la aplicación, cada usuario podría personalizar su experiencia de varias formas. Primero, el tipo de plan: clásico, con bonfire nocturno, o plan familiar. Segundo, el menú del almuerzo: por ejemplo, elegir entre opciones de mariscos, carnes, o vegetariano, y agregar bebidas adicionales. Tercero, el horario de salida y de regreso, según la disponibilidad del día. Cuarto, el número de personas y si van en grupo, para organizar mesas o zonas específicas. Y quinto, agregar experiencias extra al momento de reservar, como una sesión de fotos, transporte privado, o una decoración especial para ocasiones como cumpleaños o despedidas. Todo esto se configura desde el celular, antes de llegar, para que el día de la pasadía todo esté listo y organizado."
+  },
+  {
+    title: "13.2 Qué más se puede vender además de pasadías",
+    page: "anuncios", highlight: "hl-app-mockup",
+    text: "La aplicación no tendría que limitarse a vender solo pasadías. Se pueden ofrecer productos y servicios adicionales que generan ingresos extra. Por ejemplo: alquiler de equipos como jet ski, kayaks, o paddle board por horas. Servicios de spa y masajes en la playa. Paquetes de fotografía y video profesional del día. Venta de merchandising, como camisetas, gorras o productos de la marca La Punta. Paquetes especiales para eventos, como cumpleaños, despedidas de soltero o soltera, o celebraciones corporativas, con decoración y atención personalizada. Y también bebidas y cócteles premium, que el cliente puede pre ordenar desde la app para tenerlos listos al llegar. Cada una de estas opciones aumenta el valor promedio de cada visita, sin necesidad de atraer más clientes nuevos."
+  },
+  {
+    title: "13.3 La app como motor de fidelización",
+    page: "anuncios", highlight: "hl-app-mockup",
+    text: "Más allá de las ventas, la aplicación se convierte en una herramienta de fidelización muy poderosa. Podemos ofrecer descuentos exclusivos por descargar la aplicación, por ejemplo, un diez por ciento en la primera reserva. Y también descuentos especiales para quienes reserven directamente desde la app, en lugar de por WhatsApp. Esto incentiva a las personas a instalarla, y una vez instalada, tu negocio queda presente en su celular: puedes enviarles notificaciones sobre promociones, eventos especiales, o recordatorios cuando estén de nuevo en Cartagena."
+  },
+  {
+    title: "13.4 Más funciones que potenciarían la app",
+    page: "anuncios", highlight: "hl-app-mockup",
+    text: "Hay otras funciones que harían esta aplicación todavía más completa. Un programa de puntos, donde cada pasadía suma puntos, y al acumular cierta cantidad, el cliente obtiene una pasadía gratis o un upgrade de plan. Un programa de referidos, donde si un cliente invita a un amigo y ese amigo reserva, ambos reciben un descuento. Notificaciones de último minuto, donde si un día tiene baja ocupación, se envía una alerta con descuento flash a los usuarios de la app, llenando cupos que de otra forma quedarían vacíos. Y un check-in con código Q R, para que la entrada el día de la pasadía sea más rápida y organizada, sin filas."
+  },
+  {
+    title: "13.5 Por qué esta opción es tan potente",
+    page: "anuncios", highlight: "hl-app-mockup",
+    text: "En resumen, mientras la campaña de Google Ads atrae nuevos clientes que no conocen La Punta, la aplicación móvil convierte a esos nuevos clientes en clientes recurrentes, abre nuevas líneas de ingreso más allá de la pasadía, mejora la experiencia de reserva, y te da un canal directo de comunicación con ellos, sin depender únicamente de Google o de WhatsApp. Al integrarla con la campaña actual, todo el tráfico que generan los anuncios puede dirigirse también a descargar la app, multiplicando el impacto de la misma inversión publicitaria. Por estar lista en solo dos semanas y trabajar de la mano con la estrategia que ya está en marcha, consideramos que esta sería una opción muy potente para el crecimiento de La Punta."
+  },
+  {
+    title: "14. Inteligencia Artificial en tu campaña",
+    page: "chat", highlight: null,
+    text: "Algo muy importante que debes saber, Lesek, es que esta herramienta tiene Inteligencia Artificial integrada, y se usa en dos sentidos. Primero, la Inteligencia Artificial de Google optimiza automáticamente la campaña de Performance Max: analiza miles de combinaciones de anuncios, audiencias, horarios y ubicaciones, y aprende en tiempo real cuáles funcionan mejor para mostrar tu negocio a las personas correctas, en el momento correcto. Esto sucede de forma automática y continua, sin que nadie tenga que hacerlo manualmente cada día. Segundo, este panel cuenta con un asistente de Inteligencia Artificial que puedes consultar en cualquier momento: puede explicarte la campaña, responder tus dudas sobre Google Ads, y registrar tus sugerencias de cambios para que nuestro equipo las revise. En otras palabras, la Inteligencia Artificial trabaja tanto detrás de cámaras, optimizando dónde se invierte tu dinero, como de frente a ti, ayudándote a entender y mejorar la estrategia."
+  },
+  {
+    title: "15. Gracias por tu atención",
+    page: "chat", highlight: null,
+    text: "Esto fue todo, Lesek. Te agradecemos mucho tu atención y el tiempo dedicado a conocer en detalle esta estrategia. Si tienes alguna pregunta, sugerencia, o quieres proponer un cambio, por ejemplo ajustar el presupuesto, agregar nuevas ciudades, o avanzar con la propuesta de la aplicación móvil, te invitamos a escribirlo en el chat del asistente que tienes justo aquí abajo. Todas tus sugerencias de cambio serán enviadas directamente a Ana María, quien es la ejecutiva encargada de tu cuenta, y se pondrá en contacto contigo para coordinar los siguientes pasos. Muchas gracias, Lesek, y esperamos seguir construyendo juntos el crecimiento de La Punta Beach Club."
+  }
+];
+
+let currentChapter = 0;
+let isPlaying = false;
+let selectedVoice = null;
+let lastHighlight = null;
+
+// ===== SELECCIÓN DE VOZ MÁS HUMANA =====
+function pickBestVoice() {
+  const voices = speechSynthesis.getVoices();
+  if (!voices.length) return null;
+  const priorities = [
+    v => v.name.includes('Google') && v.lang === 'es-US',
+    v => v.name.includes('Google') && v.lang === 'es-MX',
+    v => v.name.includes('Google') && v.lang === 'es-ES',
+    v => v.name.includes('Google') && v.lang.startsWith('es'),
+    v => /natural|neural|premium|wavenet/i.test(v.name) && v.lang.startsWith('es'),
+    v => v.lang === 'es-CO',
+    v => v.lang === 'es-MX',
+    v => v.lang === 'es-US',
+    v => v.lang.startsWith('es'),
+  ];
+  for (const test of priorities) {
+    const found = voices.find(test);
+    if (found) return found;
+  }
+  return voices[0];
+}
+
+function buildUtterance(text) {
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = (selectedVoice && selectedVoice.lang) || 'es-MX';
+  if (selectedVoice) utt.voice = selectedVoice;
+  utt.rate = 1.12;
+  utt.pitch = 1.0;
+  utt.volume = 1;
+  return utt;
+}
+
+// ===== NAVEGACIÓN INTERACTIVA DEL PANEL =====
+function goToPanelSection(pageId, highlightId) {
+  // Switch tab
+  const tabs = document.querySelectorAll('.tab');
+  const pages = document.querySelectorAll('.page');
+  tabs.forEach(t => t.classList.remove('active'));
+  pages.forEach(p => p.classList.remove('active'));
+  const targetPage = document.getElementById('page-' + pageId);
+  if (targetPage) targetPage.classList.add('active');
+  // find matching tab by onclick attr
+  tabs.forEach(t => {
+    if (t.getAttribute('onclick') && t.getAttribute('onclick').includes("'" + pageId + "'")) {
+      t.classList.add('active');
+    }
+  });
+
+  // Remove previous highlight
+  if (lastHighlight) {
+    const prevEl = document.getElementById(lastHighlight);
+    if (prevEl) prevEl.classList.remove('voice-highlight');
+    lastHighlight = null;
+  }
+
+  // Apply new highlight
+  if (highlightId) {
+    setTimeout(() => {
+      const el = document.getElementById(highlightId);
+      if (el) {
+        el.classList.add('voice-highlight');
+        el.scrollIntoView({behavior: 'smooth', block: 'center'});
+        lastHighlight = highlightId;
+      }
+    }, 150);
+  }
+}
+
+// ===== REPRODUCCIÓN DE CAPÍTULOS =====
+function speakChapter(index, autoAdvance) {
+  if (index < 0 || index >= CHAPTERS.length) { stopVoice(); return; }
+  currentChapter = index;
+  const ch = CHAPTERS[index];
+  document.getElementById('voice-chapter-title').textContent = ch.title;
+  document.getElementById('voice-text').textContent = ch.text;
+
+  // Mover el panel a la sección correspondiente
+  goToPanelSection(ch.page, ch.highlight);
+
+  const sentences = ch.text.match(/[^.!?]+[.!?]+/g) || [ch.text];
+  let i = 0;
+
+  function speakSentence() {
+    if (i >= sentences.length) {
+      if (autoAdvance && isPlaying && currentChapter < CHAPTERS.length - 1) {
+        speakChapter(currentChapter + 1, true);
+      } else if (autoAdvance) {
+        stopVoice();
+      }
+      return;
+    }
+    const utt = buildUtterance(sentences[i].trim());
+    utt.onend = () => { i++; speakSentence(); };
+    speechSynthesis.speak(utt);
+  }
+  speechSynthesis.cancel();
+  speakSentence();
+}
+
+function toggleVoice() {
+  if (isPlaying) {
+    stopVoice();
+  } else {
+    isPlaying = true;
+    document.getElementById('voice-icon').textContent = '⏸️';
+    document.getElementById('voice-label').textContent = 'Pausar explicación';
+    document.getElementById('voice-progress').style.display = 'block';
+    document.getElementById('chapter-list').style.display = 'none';
+    speakChapter(0, true);
+  }
+}
+
+function stopVoice() {
+  isPlaying = false;
+  speechSynthesis.cancel();
+  document.getElementById('voice-icon').textContent = '🔊';
+  document.getElementById('voice-label').textContent = 'Escuchar explicación completa';
+  document.getElementById('voice-progress').style.display = 'none';
+  if (lastHighlight) {
+    const prevEl = document.getElementById(lastHighlight);
+    if (prevEl) prevEl.classList.remove('voice-highlight');
+    lastHighlight = null;
+  }
+}
+
+function nextChapter() {
+  if (currentChapter < CHAPTERS.length - 1) speakChapter(currentChapter + 1, isPlaying);
+}
+function prevChapter() {
+  if (currentChapter > 0) speakChapter(currentChapter - 1, isPlaying);
+}
+
+// ===== LISTA DE CAPÍTULOS =====
+function toggleChapters() {
+  const el = document.getElementById('chapter-list');
+  const isOpen = el.style.display === 'block';
+  el.style.display = isOpen ? 'none' : 'block';
+  if (!isOpen) renderChapters();
+}
+function renderChapters() {
+  const el = document.getElementById('chapter-items');
+  el.innerHTML = CHAPTERS.map((ch, idx) => `
+    <div onclick="playSingleChapter(${idx})" style="padding:8px 10px;border-radius:8px;cursor:pointer;font-size:12px;color:#3c4043;border:1px solid #f1f3f4;margin-bottom:5px;transition:background .15s" onmouseover="this.style.background='#f1f3f4'" onmouseout="this.style.background='transparent'">
+      ${ch.title}
+    </div>
+  `).join('');
+}
+function playSingleChapter(idx) {
+  isPlaying = true;
+  document.getElementById('voice-icon').textContent = '⏸️';
+  document.getElementById('voice-label').textContent = 'Pausar explicación';
+  document.getElementById('voice-progress').style.display = 'block';
+  document.getElementById('chapter-list').style.display = 'none';
+  speakChapter(idx, false);
+}
+
+// ===== INIT =====
+function initVoices() {
+  selectedVoice = pickBestVoice();
+}
+if ('speechSynthesis' in window) {
+  initVoices();
+  speechSynthesis.onvoiceschanged = initVoices;
+}
+</script>
+
+</body>
+</html>
